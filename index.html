@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi amor ❤️">
+<meta name="application-name" content="Mi amor ❤️">
+<meta name="format-detection" content="telephone=no">
+<!-- Icono personalizado (enlace directo de Google Drive, ID 1lLmq6RW0XoYMSVXJ9HikI758w0wF7mhD) -->
+<link rel="apple-touch-icon" id="apple-icon" href="https://lh3.googleusercontent.com/d/1lLmq6RW0XoYMSVXJ9HikI758w0wF7mhD">
+<link rel="icon" type="image/png" id="fav" href="https://lh3.googleusercontent.com/d/1lLmq6RW0XoYMSVXJ9HikI758w0wF7mhD">
+<link rel="manifest" id="manifest">
+<title>Mi amor ❤️ · Acompaña su ciclo con amor</title>
+<meta name="description" content="App para parejas: entiende la fase del ciclo menstrual de tu pareja, recibe consejos prácticos y guías de situación adaptadas a cada fase.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: { fontFamily: { sans: ['-apple-system','BlinkMacSystemFont','"SF Pro Display"','Inter','sans-serif'] } } } };
+</script>
+<style>
+  :root { --accent: #c94f74; --accent2: #7a4f9e; }
+  body { background:
+      radial-gradient(1100px 520px at 0% -10%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 65%),
+      radial-gradient(900px 480px at 110% 0%, color-mix(in srgb, var(--accent2) 7%, transparent), transparent 65%),
+      linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 60%, #eeeef1 100%);
+    background-attachment: fixed; color: #1d1d1f; letter-spacing: -0.01em;
+    transition: background .8s ease; min-height: 100vh; }
+  h2, h3, h4 { letter-spacing: -0.025em; }
+  .glass { background: rgba(255,255,255,.72); border: 1px solid rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 8px 30px rgba(0,0,0,.05);
+    backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+  .accent-text { color: var(--accent); }
+  .accent-bg { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .silver { background: linear-gradient(145deg, #ffffff 0%, #e9e9ee 45%, #d4d5db 100%); border: 1px solid rgba(0,0,0,.06);
+    box-shadow: inset 0 1px 0 #fff, 0 4px 14px rgba(0,0,0,.08); }
+  .fade-in { animation: fade .5s ease both; }
+  @keyframes fade { from { opacity:0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+  .ring-track { stroke: #ececf0; }
+  .ring-prog { transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1), stroke .6s; }
+  .bar > span { transition: width 1s cubic-bezier(.2,.8,.2,1); }
+  .bar { background: #ececf0 !important; }
+  .chip { transition: all .2s ease; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .chip:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .chip.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 30%, transparent); }
+  .tab.active { color:#1d1d1f; border-color: var(--accent); }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)} 70%{box-shadow:0 0 0 10px transparent} 100%{box-shadow:0 0 0 0 transparent} }
+  #stars { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; z-index: 0;
+    background-image: radial-gradient(1.5px 1.5px at 12% 18%, #9aa0ad, transparent), radial-gradient(1px 1px at 72% 12%, #b5bac4, transparent),
+      radial-gradient(2px 2px at 40% 70%, #c3c7d0, transparent), radial-gradient(1px 1px at 85% 55%, #9aa0ad, transparent),
+      radial-gradient(1.5px 1.5px at 22% 88%, #b5bac4, transparent), radial-gradient(2px 2px at 58% 35%, #c9b8f0, transparent),
+      radial-gradient(1px 1px at 93% 85%, #9aa0ad, transparent), radial-gradient(1.5px 1.5px at 5% 50%, #c3c7d0, transparent);
+    background-size: 600px 600px; animation: drift 120s linear infinite; }
+  body.astro-on #stars { opacity: .7; }
+  @keyframes drift { to { background-position: 600px 300px; } }
+  header, main { position: relative; z-index: 1; }
+  .astro-card { background: linear-gradient(135deg, rgba(139,111,224,.07), rgba(255,255,255,.85)); border: 1px solid rgba(139,111,224,.18);
+    box-shadow: 0 8px 30px rgba(139,111,224,.08); }
+  html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+  button, .chip, .tab { touch-action: manipulation; min-height: 44px; }
+  #bottom-nav { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .nav-btn.active { color: #1d1d1f; }
+  .nav-btn.active .nav-ico { background: linear-gradient(135deg, var(--accent), var(--accent2)); color:#fff; }
+  @media (display-mode: standalone) { #install-btn { display: none !important; } }
+  input[type=date]::-webkit-calendar-picker-indicator { opacity:.5; }
+  input[type=range] { accent-color: var(--accent); }
+</style>
+</head>
+<body class="font-sans text-neutral-800 antialiased">
+<div id="stars" aria-hidden="true"></div>
+
+<header class="max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl silver grid place-items-center text-lg">❤️</div>
+    <div>
+      <p class="font-semibold tracking-wide text-neutral-900">Mi amor ❤️</p>
+      <p class="text-xs text-neutral-500">Acompaña. Entiende. Conecta.</p>
+    </div>
+  </div>
+  <div class="flex gap-2">
+    <button id="install-btn" class="hidden glass rounded-xl px-4 text-sm accent-text">⬇ Instalar</button>
+    <button id="btn-settings" class="hidden md:inline-block glass rounded-xl px-4 py-2 text-sm hover:border-black/10 transition">⚙︎ Ajustes</button>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 md:px-5 py-5 md:py-6 space-y-5 md:space-y-6 pb-32 md:pb-10">
+  <h1 class="sr-only">Mi amor ❤️ – Compañero del ciclo menstrual para parejas</h1>
+
+  <!-- Setup -->
+  <section id="setup" class="hidden glass rounded-3xl p-6 md:p-10 fade-in max-w-xl mx-auto">
+    <h2 class="text-2xl font-semibold text-neutral-900 mb-1">Configura el ciclo</h2>
+    <p class="text-neutral-500 text-sm mb-6">Los datos se guardan solo en este dispositivo.</p>
+    <form id="setup-form" class="space-y-5">
+      <label class="block">
+        <span class="text-sm text-neutral-600">Primer día del último período</span>
+        <input id="in-start" type="date" required class="mt-2 w-full bg-neutral-100/70 border border-black/[.06] rounded-xl px-4 py-3 text-neutral-900 focus:outline-none focus:border-[var(--accent)]">
+      </label>
+      <label class="block">
+        <span class="text-sm text-neutral-600">Duración promedio del ciclo: <b id="len-val" class="text-neutral-900">28</b> días</span>
+        <input id="in-len" type="range" min="21" max="40" value="28" class="mt-3 w-full accent-[#c26d8a]">
+      </label>
+      <label class="block">
+        <span class="text-sm text-neutral-600">Duración del sangrado: <b id="per-val" class="text-neutral-900">5</b> días</span>
+        <input id="in-per" type="range" min="2" max="8" value="5" class="mt-3 w-full accent-[#c26d8a]">
+      </label>
+      <div class="pt-4 border-t border-black/[.06] space-y-4">
+        <p class="text-sm text-violet-600">✦ Personalización opcional</p>
+        <label class="block">
+          <span class="text-sm text-neutral-600">Nombre o apodo de tu pareja</span>
+          <input id="in-name" type="text" maxlength="24" placeholder="Ej. Ana" class="mt-2 w-full bg-neutral-100/70 border border-black/[.06] rounded-xl px-4 py-3 text-neutral-900 focus:outline-none focus:border-[var(--accent)]">
+        </label>
+        <label class="block">
+          <span class="text-sm text-neutral-600">Fecha de nacimiento (para su signo)</span>
+          <input id="in-birth" type="date" class="mt-2 w-full bg-neutral-100/70 border border-black/[.06] rounded-xl px-4 py-3 text-neutral-900 focus:outline-none focus:border-[var(--accent)]">
+          <span id="sign-preview" class="block text-xs text-violet-600 mt-2"></span>
+        </label>
+        <label class="flex items-center gap-3 text-sm text-neutral-600 cursor-pointer">
+          <input id="in-astro" type="checkbox" checked class="w-4 h-4 accent-violet-400"> Activar capa astrológica ✦
+        </label>
+      </div>
+      <div class="flex gap-3">
+        <button type="submit" id="btn-save" class="flex-1 accent-bg text-white font-medium rounded-xl py-3 hover:opacity-90 transition">Guardar y comenzar</button>
+        <button type="button" id="btn-reset" class="px-4 rounded-xl border border-black/[.06] text-neutral-500 hover:text-neutral-900 text-sm">Borrar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden space-y-6">
+    <div id="alert" class="hidden"></div>
+
+    <section class="grid lg:grid-cols-5 gap-6">
+      <!-- Main widget -->
+      <div class="lg:col-span-3 glass rounded-3xl p-6 md:p-8 fade-in">
+        <div class="flex flex-col sm:flex-row items-center gap-8">
+          <div class="relative w-52 h-52 shrink-0">
+            <svg viewBox="0 0 200 200" class="w-full h-full -rotate-90">
+              <circle cx="100" cy="100" r="86" fill="none" stroke-width="14" class="ring-track"/>
+              <g id="ring-segments"></g>
+              <circle id="ring" cx="100" cy="100" r="86" fill="none" stroke-width="6" stroke-linecap="round" class="ring-prog" stroke="#1d1d1f" stroke-opacity=".85"/>
+            </svg>
+            <div class="absolute inset-0 grid place-items-center text-center">
+              <div>
+                <p class="text-xs uppercase tracking-[.2em] text-neutral-500">Día</p>
+                <p id="day-num" class="text-6xl font-semibold text-neutral-900 leading-none">–</p>
+                <p id="day-of" class="text-sm text-neutral-500 mt-1"></p>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1 text-center sm:text-left">
+            <span class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-500"><span class="w-2 h-2 rounded-full accent-bg pulse-dot"></span> <span id="today-label">Hoy</span></span>
+            <h2 id="phase-name" class="text-3xl md:text-4xl font-semibold mt-2 accent-text"></h2>
+            <p id="phase-tag" class="text-neutral-600 mt-2"></p>
+            <p id="phase-desc" class="text-neutral-500 text-sm mt-3 leading-relaxed"></p>
+            <div class="mt-5 flex flex-wrap gap-2 justify-center sm:justify-start text-xs">
+              <span id="next-phase" class="glass rounded-full px-3 py-1.5"></span>
+              <span id="next-period" class="glass rounded-full px-3 py-1.5"></span>
+            </div>
+          </div>
+        </div>
+        <!-- timeline -->
+        <div class="mt-8">
+          <div id="timeline" class="flex h-2.5 rounded-full overflow-hidden gap-0.5"></div>
+          <div id="timeline-labels" class="flex text-[10px] md:text-xs text-neutral-400 mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Mood -->
+      <div class="lg:col-span-2 glass rounded-3xl p-6 md:p-8 fade-in">
+        <h3 class="text-lg font-semibold text-neutral-900">Clima emocional esperado</h3>
+        <p class="text-xs text-neutral-500 mb-5">Tendencias generales; cada persona es única.</p>
+        <div id="mood" class="space-y-4"></div>
+        <p id="mood-summary" class="mt-6 text-sm text-neutral-600 border-l-2 pl-3" style="border-color:var(--accent)"></p>
+      </div>
+    </section>
+
+    <!-- Astro -->
+    <section id="astro" class="hidden astro-card rounded-3xl p-6 md:p-8 fade-in"></section>
+
+    <!-- Tips -->
+    <section id="sec-tips" class="glass rounded-3xl p-6 md:p-8 fade-in">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-5">
+        <div>
+          <h3 class="text-xl font-semibold text-neutral-900">Recomendaciones para hoy</h3>
+          <p class="text-sm text-neutral-500">Adaptadas a la <span id="tips-phase" class="accent-text"></span></p>
+        </div>
+        <div class="flex gap-4 text-sm border-b border-black/[.06]" id="tabs">
+          <button class="tab active pb-2 border-b-2 border-transparent text-neutral-500" data-tab="do">✓ Qué hacer</button>
+          <button class="tab pb-2 border-b-2 border-transparent text-neutral-500" data-tab="avoid">✕ Qué evitar</button>
+          <button class="tab pb-2 border-b-2 border-transparent text-neutral-500" data-tab="food">◐ Bienestar</button>
+        </div>
+      </div>
+      <div id="tips" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Situations -->
+    <section id="sec-guide" class="glass rounded-3xl p-6 md:p-8 fade-in">
+      <h3 class="text-xl font-semibold text-neutral-900">¿Cómo actuar?</h3>
+      <p class="text-sm text-neutral-500 mb-5">Elige una situación y recibe una guía según su fase actual.</p>
+      <input id="sit-search" type="search" placeholder="Buscar situación…" class="w-full md:w-80 mb-4 bg-neutral-100/70 border border-black/[.06] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--accent)]">
+      <div id="sit-chips" class="flex flex-wrap gap-2"></div>
+      <div id="sit-answer" class="mt-6"></div>
+    </section>
+
+    <!-- Phases overview -->
+    <section class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="overview"></section>
+
+    <p class="text-center text-xs text-neutral-400 pb-6">Mi amor es una guía orientativa basada en patrones hormonales promedio. No sustituye el consejo médico ni la comunicación directa con tu pareja.</p>
+  </div>
+</main>
+
+<!-- iOS install hint -->
+<div id="ios-hint" class="hidden fixed inset-x-3 bottom-24 z-40 glass rounded-2xl p-4 text-sm fade-in" style="background:rgba(255,255,255,.95)">
+  <button id="ios-close" class="absolute top-1 right-2 text-neutral-500 text-lg" aria-label="Cerrar">×</button>
+  <p class="text-neutral-900 font-medium">Instala Mi amor ❤️ en tu iPhone</p>
+  <p class="text-neutral-500 mt-1">Pulsa <b class="text-neutral-900">Compartir ⎋</b> en Safari y luego <b class="text-neutral-900">«Añadir a pantalla de inicio»</b>.</p>
+</div>
+
+<!-- Bottom nav (mobile, one-hand) -->
+<nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-30 border-t border-black/[.06]" style="background:rgba(255,255,255,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)">
+  <div class="grid grid-cols-4 pt-2 text-[11px] text-neutral-500">
+    <button class="nav-btn active flex flex-col items-center gap-1" data-go="top" id="nav-home"><span class="nav-ico w-11 h-8 rounded-full grid place-items-center text-base transition">◐</span>Hoy</button>
+    <button class="nav-btn flex flex-col items-center gap-1" data-go="sec-tips" id="nav-tips"><span class="nav-ico w-11 h-8 rounded-full grid place-items-center text-base transition">✓</span>Consejos</button>
+    <button class="nav-btn flex flex-col items-center gap-1" data-go="sec-guide" id="nav-guide"><span class="nav-ico w-11 h-8 rounded-full grid place-items-center text-base transition">💬</span>Guía</button>
+    <button class="nav-btn flex flex-col items-center gap-1" data-go="settings" id="nav-settings"><span class="nav-ico w-11 h-8 rounded-full grid place-items-center text-base transition">⚙︎</span>Ajustes</button>
+  </div>
+</nav>
+
+<script>
+const PHASES = {
+  menstrual: {
+    name: 'Fase Menstrual', short: 'Menstrual', icon: '🌑', c1: '#c94f74', c2: '#7a4f9e',
+    tag: 'Descanso, introspección y recarga.',
+    desc: 'Estrógeno y progesterona están en su punto más bajo. El cuerpo está trabajando: puede haber cólicos, cansancio y necesidad de calma.',
+    mood: { 'Energía': 25, 'Tolerancia al estrés': 35, 'Sensibilidad emocional': 70, 'Libido': 25, 'Sociabilidad': 25 },
+    summary: 'Prioriza la comodidad. Tu presencia tranquila vale más que cualquier plan.',
+    do: ['Ofrece una bolsa de agua caliente o manta sin que lo pida.', 'Propón un plan casero: película, sofá y su comida favorita.', 'Encárgate de tareas domésticas pesadas o recados.', 'Pregunta "¿qué te vendría bien ahora?" en lugar de suponer.', 'Ten a mano analgésicos, infusiones y productos de higiene.', 'Contacto físico suave: masajes en espalda baja o pies.'],
+    avoid: ['Planes exigentes o eventos sociales largos.', 'Comentarios sobre su humor ("¿estás en tus días?").', 'Discusiones de temas pesados (finanzas, conflictos).', 'Presionar con la intimidad.', 'Minimizar su dolor o cansancio.', 'Interpretar su necesidad de calma como rechazo.'],
+    food: ['Alimentos ricos en hierro: lentejas, espinacas, carne roja magra.', 'Chocolate negro (70%+): magnesio y consuelo.', 'Infusiones de jengibre o manzanilla para los cólicos.', 'Caldos y sopas calientes.', 'Hidratación abundante; menos cafeína y sal.', 'Suplemento de magnesio u omega‑3 (consultar con profesional).']
+  },
+  folicular: {
+    name: 'Fase Folicular', short: 'Folicular', icon: '🌒', c1: '#2a9d8f', c2: '#4a8fd6',
+    tag: 'Energía en ascenso, curiosidad y ganas de novedad.',
+    desc: 'El estrógeno sube. Mejora el ánimo, la creatividad y la energía. Es un gran momento para planes nuevos y conversaciones constructivas.',
+    mood: { 'Energía': 70, 'Tolerancia al estrés': 75, 'Sensibilidad emocional': 40, 'Libido': 60, 'Sociabilidad': 70 },
+    summary: 'Momento ideal para proponer aventuras, proyectos y planes en pareja.',
+    do: ['Propón algo nuevo: un restaurante, curso o escapada.', 'Planifiquen juntos objetivos o viajes.', 'Hagan deporte o actividades al aire libre juntos.', 'Apoya sus proyectos personales y nuevas ideas.', 'Es buen momento para conversaciones importantes.', 'Organiza una cita espontánea.'],
+    avoid: ['Caer en la rutina o el "lo de siempre".', 'Frenar su entusiasmo con negatividad.', 'Cancelar planes a última hora.', 'Ignorar sus ideas o propuestas.', 'Dejar todas las decisiones en sus manos.', 'Ser pasivo: ella busca estímulo.'],
+    food: ['Alimentos frescos y ligeros: ensaladas, frutas, verduras.', 'Proteína magra para acompañar el ejercicio.', 'Alimentos fermentados (yogur, kéfir) para la salud intestinal.', 'Semillas de lino y calabaza (semilla-ciclo).', 'Avena y granos integrales para energía estable.', 'Buen momento para probar recetas nuevas juntos.']
+  },
+  ovulatoria: {
+    name: 'Fase Ovulatoria', short: 'Ovulatoria', icon: '🌕', c1: '#c99a3e', c2: '#d9708f',
+    tag: 'Máxima energía, confianza y conexión.',
+    desc: 'Pico de estrógeno y testosterona. Se siente más segura, sociable y comunicativa. La libido suele estar en su punto más alto. También es su ventana fértil.',
+    mood: { 'Energía': 90, 'Tolerancia al estrés': 85, 'Sensibilidad emocional': 35, 'Libido': 95, 'Sociabilidad': 90 },
+    summary: 'Conecta, celebra y disfruta. Ten en cuenta que es la ventana más fértil.',
+    do: ['Organiza una cita romántica o especial.', 'Planes sociales: cenas con amigos, eventos, música en vivo.', 'Hazle cumplidos sinceros: se siente radiante.', 'Fomenta la intimidad y el juego en pareja.', 'Conversaciones profundas y emocionales fluyen mejor.', 'Si no buscan embarazo, sean responsables con la anticoncepción.'],
+    avoid: ['Ignorar sus señales de cercanía.', 'Quedarse siempre en casa si ella quiere salir.', 'Celos o inseguridades por su sociabilidad.', 'Descuidar la anticoncepción.', 'Estar distraído con el móvil en momentos juntos.', 'Planes monótonos.'],
+    food: ['Verduras crucíferas (brócoli, kale) para metabolizar estrógenos.', 'Frutas con antioxidantes: frutos rojos, cítricos.', 'Fibra abundante y mucha agua.', 'Pescado y frutos secos (zinc, omega‑3).', 'Comidas ligeras y coloridas.', 'Brunch o cena especial compartida.']
+  },
+  lutea: {
+    name: 'Fase Lútea', short: 'Lútea / SPM', icon: '🌘', c1: '#cc6a3f', c2: '#a8553c',
+    tag: 'Introspección creciente y necesidad de estabilidad.',
+    desc: 'Domina la progesterona; al final, ambas hormonas caen y puede aparecer el SPM: irritabilidad, hinchazón, antojos y mayor sensibilidad.',
+    mood: { 'Energía': 45, 'Tolerancia al estrés': 35, 'Sensibilidad emocional': 85, 'Libido': 40, 'Sociabilidad': 40 },
+    summary: 'Paciencia, previsibilidad y validación. No te lo tomes personal.',
+    do: ['Valida sus emociones: "Tiene sentido que te sientas así".', 'Mantén rutinas y planes predecibles y tranquilos.', 'Anticípate a antojos: ten snacks favoritos en casa.', 'Ofrece ayuda concreta para reducir su carga.', 'Paseos suaves, yoga o baños calientes.', 'Escucha más, aconseja menos.'],
+    avoid: ['Atribuir sus quejas legítimas "a las hormonas".', 'Iniciar discusiones o temas conflictivos.', 'Críticas sobre su cuerpo, comida o aspecto.', 'Sorpresas grandes o cambios de planes bruscos.', 'Responder con sarcasmo ante la irritabilidad.', 'Desaparecer emocionalmente: necesita sentirte cerca.'],
+    food: ['Carbohidratos complejos: boniato, arroz integral, avena.', 'Magnesio: plátano, aguacate, chocolate negro.', 'Reducir sal, alcohol y cafeína (menos hinchazón y ansiedad).', 'Vitamina B6: garbanzos, pollo, pavo.', 'Comidas reconfortantes caseras y calientes.', 'Infusiones relajantes por la noche (tila, melisa).']
+  }
+};
+
+const SITUATIONS = [
+  { id: 'irritada', label: '😤 Está irritada o cansada', r: {
+    menstrual: ['Es probable que sea agotamiento físico real. Baja el ritmo del día.', ['Encárgate de la cena y las tareas pendientes.', 'Ofrece descanso sin hacer preguntas.', 'Evita pedirle decisiones.'], '"Hoy me encargo yo de todo, tú descansa."'],
+    folicular: ['En esta fase la irritabilidad suele tener una causa externa concreta (trabajo, estrés).', ['Pregunta qué pasó con interés genuino.', 'Ayuda a buscar soluciones si lo pide.', 'Propón algo que la distraiga.'], '"¿Quieres contarme qué te ha molestado? Te escucho."'],
+    ovulatoria: ['No es lo habitual en esta fase; probablemente haya algo concreto detrás.', ['Tómatelo en serio, no lo minimices.', 'Escucha activamente.', 'Ofrece apoyo práctico directo.'], '"Te noto molesta, ¿hay algo en lo que pueda ayudarte?"'],
+    lutea: ['El SPM puede amplificar emociones. Su sentir es real aunque la intensidad sea mayor.', ['No te defiendas ni lo tomes personal.', 'Valida y baja el tono.', 'Dale un respiro y ofrece comodidad (snack, baño, silencio).'], '"Entiendo que estés agobiada. ¿Te preparo algo o prefieres un rato tranquila?"']
+  }},
+  { id: 'espacio', label: '🌿 Quiere espacio personal', r: {
+    menstrual: ['Es una fase de introspección natural; necesita recargar.', ['Respeta el espacio sin sentirte rechazado.', 'Deja a mano lo que pueda necesitar.', 'Escribe un mensaje cariñoso breve.'], '"Aquí estoy si me necesitas. Tómate tu tiempo ❤️"'],
+    folicular: ['Puede querer enfocarse en sus proyectos o amistades.', ['Apoya su independencia.', 'Aprovecha para tus propios planes.', 'Reencuéntrense con un plan divertido después.'], '"¡Disfruta tu tarde! Luego me cuentas."'],
+    ovulatoria: ['Raro en esta fase; puede indicar algo pendiente o simplemente un día lleno.', ['Respeta, pero muéstrate disponible.', 'Más tarde, pregunta con suavidad cómo está.'], '"Te doy tu espacio. Cuando quieras hablamos."'],
+    lutea: ['Muy habitual: se siente saturada y necesita regular emociones.', ['Dale espacio sin hacer preguntas en exceso.', 'No interpretes distancia como enfado contigo.', 'Mantén pequeños gestos: un té, una manta.'], '"Te dejo tranquila. Si te apetece compañía, avísame."']
+  }},
+  { id: 'dolor', label: '🔥 Tiene dolor o cólicos', r: {
+    menstrual: ['Es el momento más común para el dolor. Actúa rápido y con cuidado.', ['Bolsa de agua caliente en el abdomen o espalda baja.', 'Analgésico habitual + infusión de jengibre.', 'Masaje suave y ambiente tranquilo.', 'Si el dolor es incapacitante, sugiere consultar a ginecología.'], '"Te traigo la bolsa caliente y algo para el dolor. ¿Qué más necesitas?"'],
+    folicular: ['El dolor no es típico de esta fase; podría no estar relacionado con el ciclo.', ['Ofrece descanso y analgésico.', 'Si persiste, anima a consultar a un médico.'], '"¿Desde cuándo te duele? Si sigue, vamos al médico."'],
+    ovulatoria: ['Puede ser dolor ovulatorio (mittelschmerz): punzada en un lado del bajo vientre.', ['Calor local y reposo.', 'Suele durar horas; si es intenso o dura mucho, consultar.'], '"Puede ser la ovulación. ¿Te preparo un baño caliente?"'],
+    lutea: ['Hinchazón, sensibilidad en pecho o dolor de cabeza son comunes antes del período.', ['Calor, hidratación y poca sal.', 'Ropa cómoda y descanso.', 'Evita comentarios sobre su cuerpo.'], '"¿Qué te alivia más ahora? Me encargo."']
+  }},
+  { id: 'finde', label: '🗓️ Plan para el fin de semana', r: {
+    menstrual: ['Prioriza comodidad y bajo esfuerzo.', ['Maratón de series, comida a domicilio y mantas.', 'Spa casero o masaje.', 'Un paseo corto si le apetece.'], '"¿Qué tal un finde tranquilo en casa con tu comida favorita?"'],
+    folicular: ['Ideal para la novedad y la aventura.', ['Escapada, senderismo o ciudad nueva.', 'Clase juntos (cocina, baile).', 'Restaurante que nunca hayan probado.'], '"¿Nos escapamos a algún sitio nuevo este finde?"'],
+    ovulatoria: ['Perfecto para planes sociales y románticos.', ['Cena especial y salida nocturna.', 'Evento, concierto o reunión con amigos.', 'Noche romántica.'], '"He reservado para cenar el sábado. Ponte guapa (aunque ya lo eres)."'],
+    lutea: ['Planes predecibles y relajados; nada demasiado exigente.', ['Cine, brunch tranquilo o paseo por la naturaleza.', 'Cocinar juntos algo reconfortante.', 'Deja margen para cancelar sin drama.'], '"¿Hacemos algo tranquilo? Y si te apetece quedarnos, también me vale."']
+  }},
+  { id: 'discusion', label: '💬 Necesito hablar de algo serio', r: {
+    menstrual: ['Mejor posponer si no es urgente; su energía es baja.', ['Si es urgente, sé breve y empático.', 'Elige un momento sin distracciones.'], '"Hay algo que quiero hablar contigo, pero puede esperar a que te sientas mejor."'],
+    folicular: ['Uno de los mejores momentos: está receptiva y orientada a soluciones.', ['Plantea el tema con calma y propuestas.', 'Escuchen ambos puntos de vista.'], '"¿Tienes un rato? Me gustaría que pensáramos juntos en algo."'],
+    ovulatoria: ['Excelente para conversaciones emocionales y de pareja.', ['Habla desde el "yo siento".', 'Aprovecha su apertura comunicativa.'], '"Quiero compartir contigo algo que siento."'],
+    lutea: ['Momento delicado: mayor sensibilidad a la crítica.', ['Si puedes, espera a la fase folicular.', 'Si no, usa tono suave y evita reproches.', 'Termina con reafirmación del vínculo.'], '"Esto no es un reproche; te quiero y quiero que lo resolvamos juntos."']
+  }},
+  { id: 'triste', label: '🥺 Está triste o sensible', r: {
+    menstrual: ['La caída hormonal puede dejar el ánimo bajo.', ['Abrazos y presencia, sin necesidad de soluciones.', 'Plan reconfortante en casa.'], '"No tienes que estar bien. Estoy contigo."'],
+    folicular: ['Probablemente haya una causa concreta; escucha.', ['Pregunta abiertamente.', 'Ofrece un plan que la anime después.'], '"¿Qué te tiene así? Cuéntame."'],
+    ovulatoria: ['Poco habitual; préstale especial atención.', ['Escucha activa y empatía.', 'Pregunta si necesita algo concreto.'], '"Estoy aquí para lo que necesites."'],
+    lutea: ['Muy frecuente en el SPM; las emociones se intensifican.', ['Valida sin juzgar ni corregir.', 'Mimos, comida reconfortante y calma.', 'Si es intenso cada mes, podría ser TDPM: sugiere hablar con un profesional.'], '"Es normal sentirse así. ¿Te abrazo?"']
+  }},
+  { id: 'antojo', label: '🍫 Tiene antojos', r: {
+    menstrual: ['Su cuerpo pide energía y consuelo.', ['Trae su antojo favorito sin juicios.', 'Añade opciones con hierro y magnesio.'], '"Te traje chocolate. Sin preguntas."'],
+    folicular: ['Menos común; disfruten probando algo nuevo.', ['Cocinen algo juntos.'], '"¿Probamos esa receta que viste?"'],
+    ovulatoria: ['El apetito suele ser menor; si hay antojo, ¡a disfrutar!', ['Plan gastronómico juntos.'], '"¿Vamos a por eso que te apetece?"'],
+    lutea: ['El metabolismo sube y pide carbohidratos y dulce. Es fisiológico.', ['Ten snacks en casa (chocolate negro, frutos secos).', 'Nunca comentes cuánto o qué come.'], '"Compré tus favoritos para tenerlos en casa."']
+  }},
+  { id: 'intimidad', label: '❤️ Intimidad', r: {
+    menstrual: ['Libido generalmente baja, aunque varía mucho entre personas.', ['Prioriza el contacto afectivo sin expectativas.', 'Deja que ella marque el ritmo.'], '"¿Te apetece que te dé un masaje?"'],
+    folicular: ['La libido va en aumento; buen momento para la complicidad.', ['Coquetea, sorprende, rompe la rutina.'], '"No dejo de pensar en ti hoy."'],
+    ovulatoria: ['Pico de libido y máxima fertilidad.', ['Romanticismo y conexión.', 'Atención a la anticoncepción si no buscan embarazo.'], '"Esta noche es solo para nosotros."'],
+    lutea: ['Libido variable; puede sentirse hinchada o incómoda con su cuerpo.', ['Sin presión; más caricias y ternura.', 'Refuerza cómo la ves.'], '"Me encantas, siempre."']
+  }}
+];
+
+// ---------- Astrología ----------
+const SIGNS = [
+  ['Capricornio','♑','tierra',[12,22],'Reservada, responsable y orgullosa; muestra el cariño con hechos.'],
+  ['Acuario','♒','aire',[1,20],'Independiente y original; valora la libertad y la conversación intelectual.'],
+  ['Piscis','♓','agua',[2,19],'Soñadora y empática; absorbe el ambiente emocional que la rodea.'],
+  ['Aries','♈','fuego',[3,21],'Directa e impulsiva; necesita acción y odia sentirse frenada.'],
+  ['Tauro','♉','tierra',[4,20],'Sensual y estable; ama la comodidad, la buena comida y la rutina.'],
+  ['Géminis','♊','aire',[5,21],'Curiosa y comunicativa; necesita variedad y hablar para procesar.'],
+  ['Cáncer','♋','agua',[6,21],'Protectora y muy sensible; el hogar es su refugio.'],
+  ['Leo','♌','fuego',[7,23],'Cálida y expresiva; necesita sentirse vista, admirada y valorada.'],
+  ['Virgo','♍','tierra',[8,23],'Detallista y servicial; se calma con orden y ayuda concreta.'],
+  ['Libra','♎','aire',[9,23],'Armoniosa y diplomática; le afectan el conflicto y la tensión.'],
+  ['Escorpio','♏','agua',[10,23],'Intensa y leal; siente profundo y valora la confianza absoluta.'],
+  ['Sagitario','♐','fuego',[11,22],'Optimista y libre; busca aventura, humor y sentido.']
+];
+function getSign(b) {
+  if (!b) return null;
+  const [, m, d] = b.split('-').map(Number);
+  // find last sign whose start <= date
+  let idx = 0;
+  for (let i = 1; i < 12; i++) { const [sm, sd] = SIGNS[i][3]; if (m > sm || (m === sm && d >= sd)) idx = i; }
+  const [cm, cd] = SIGNS[0][3]; if (m === cm && d >= cd) idx = 0;
+  const s = SIGNS[idx]; return { name: s[0], sym: s[1], el: s[2], trait: s[4] };
+}
+const ELEMENTS = {
+  fuego: { name: 'Fuego', icon: '🜂', color: '#e0794c', core: 'Energía intensa, impulso y necesidad de expresión.',
+    phase: {
+      menstrual: 'El fuego choca con el bajón hormonal: puede frustrarse por no rendir como siempre. La irritabilidad suele ser impaciencia consigo misma.',
+      folicular: 'Fuego y estrógeno en ascenso = combustión. Querrá retos, deporte y espontaneidad. Síguele el ritmo.',
+      ovulatoria: 'Su momento de máximo brillo: magnética, segura y apasionada. Celébrala abiertamente.',
+      lutea: 'El fuego se vuelve reactivo: respuestas rápidas y cortantes. Mejor canalizar con movimiento que con palabras.' },
+    tips: { do: 'Como signo de fuego, propón movimiento: un paseo enérgico o actividad física suave la ayuda a descargar.', avoid: 'Evita competir o "ganar" discusiones: el fuego escala rápido.', food: 'Alimentos refrescantes (pepino, sandía, menta) para equilibrar su calor interno.' },
+    sit: 'Fuego: sé directo y breve, sin rodeos. Ofrece una vía de acción en lugar de largas charlas.' },
+  tierra: { name: 'Tierra', icon: '🜃', color: '#6f9a4f', core: 'Estabilidad, sensorialidad y sentido práctico.',
+    phase: {
+      menstrual: 'La tierra pide descanso físico y confort sensorial. Valorará más un gesto práctico que mil palabras.',
+      folicular: 'Energía constructiva: ideal para proyectos, orden y planes concretos a futuro.',
+      ovulatoria: 'Sensualidad a flor de piel: cenas, texturas, ambiente cuidado. Conecta a través de los sentidos.',
+      lutea: 'Se aferra al control y la rutina; los imprevistos le generan ansiedad. Da previsibilidad.' },
+    tips: { do: 'Signo de tierra: demuestra cariño con hechos (resolver una tarea, preparar comida, un masaje).', avoid: 'Evita el caos, la impuntualidad y cambiar planes a última hora.', food: 'Comidas caseras y nutritivas: guisos, raíces, pan artesano. El placer sensorial la reconforta.' },
+    sit: 'Tierra: actúa en lugar de explicar. Una solución práctica y tangible vale más que cualquier discurso.' },
+  aire: { name: 'Aire', icon: '🜁', color: '#4a9cc4', core: 'Mente activa, comunicación y necesidad de espacio.',
+    phase: {
+      menstrual: 'La mente sigue activa aunque el cuerpo pida pausa. Puede querer hablar o distraerse con lecturas y series.',
+      folicular: 'Ideas a mil por hora: conversaciones estimulantes, planes sociales y novedades.',
+      ovulatoria: 'Encantadora y sociable al máximo. El coqueteo verbal y el humor son tu mejor puente.',
+      lutea: 'La mente sobrepiensa: puede racionalizar en exceso o distanciarse. Necesita hablar sin ser juzgada.' },
+    tips: { do: 'Signo de aire: conversa. Pregúntale qué piensa y escucha; procesar hablando la alivia.', avoid: 'Evita agobiarla con demasiada cercanía física o control: el aire necesita espacio.', food: 'Comidas ligeras a horas regulares; su sistema nervioso agradece infusiones calmantes.' },
+    sit: 'Aire: comunica con palabras claras y lógica amable. Respeta su espacio mental y no dramatices.' },
+  agua: { name: 'Agua', icon: '🜄', color: '#a78bfa', core: 'Profundidad emocional, intuición y sensibilidad.',
+    phase: {
+      menstrual: 'Agua y menstruación amplifican la introspección. Puede llorar con facilidad; necesita refugio y ternura.',
+      folicular: 'Emociones más ligeras y creativas. Buen momento para planes íntimos y artísticos.',
+      ovulatoria: 'Conexión emocional profunda: es cuando más se abre. Momentos íntimos y significativos.',
+      lutea: 'Sensibilidad máxima: percibe cada matiz de tono. Una palabra brusca puede doler el doble.' },
+    tips: { do: 'Signo de agua: valida sus emociones y ofrece contacto físico tierno; necesita sentirse comprendida.', avoid: 'Evita la frialdad, el sarcasmo o minimizar lo que siente.', food: 'Bebidas calientes, sopas y baños relajantes; reduce la sal para evitar retención.' },
+    sit: 'Agua: prioriza la empatía antes que las soluciones. Tu tono importa más que tus palabras.' }
+};
+function astro() { if (!data || data.astro === false) return null; const s = getSign(data.birth); return s ? { ...s, E: ELEMENTS[s.el] } : null; }
+const who = () => (data && data.name) ? data.name : 'Ella';
+
+const KEY = 'sincro-data-v1';
+const $ = s => document.querySelector(s);
+const DAY = 86400000;
+let data = JSON.parse(localStorage.getItem(KEY) || 'null');
+let activeTab = 'do', activeSit = null;
+
+function ranges(len, per) {
+  const ovDay = len - 14; // ovulation estimate
+  const ovS = Math.max(per + 2, ovDay - 2), ovE = Math.min(len - 6, ovDay + 2);
+  return [
+    { k: 'menstrual', s: 1, e: per },
+    { k: 'folicular', s: per + 1, e: ovS - 1 },
+    { k: 'ovulatoria', s: ovS, e: ovE },
+    { k: 'lutea', s: ovE + 1, e: len }
+  ];
+}
+
+function compute() {
+  const start = new Date(data.start + 'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.floor((today - start) / DAY);
+  const len = data.len;
+  const day = ((diff % len) + len) % len + 1;
+  const rs = ranges(len, data.per);
+  const idx = rs.findIndex(r => day >= r.s && day <= r.e);
+  const cur = rs[idx], next = rs[(idx + 1) % 4];
+  const daysToNext = cur.e - day + 1;
+  const daysToPeriod = len - day + 1;
+  return { day, len, rs, cur, next, daysToNext, daysToPeriod, today };
+}
+
+function fmt(d) { return d.toLocaleDateString('es', { day: 'numeric', month: 'short' }); }
+
+function render() {
+  if (!data) { $('#setup').classList.remove('hidden'); $('#dashboard').classList.add('hidden'); return; }
+  $('#setup').classList.add('hidden'); $('#dashboard').classList.remove('hidden');
+  const c = compute(), P = PHASES[c.cur.k];
+  document.documentElement.style.setProperty('--accent', P.c1);
+  document.documentElement.style.setProperty('--accent2', P.c2);
+
+  $('#day-num').textContent = c.day;
+  $('#day-of').textContent = `de ${c.len} días`;
+  $('#phase-name').textContent = `${P.icon} ${P.name}`;
+  $('#phase-tag').textContent = P.tag;
+  $('#phase-desc').textContent = P.desc;
+  $('#next-phase').innerHTML = `Próxima: <b class="text-neutral-900">${PHASES[c.next.k].short}</b> en ${c.daysToNext} día${c.daysToNext>1?'s':''}`;
+  $('#next-period').innerHTML = `Próximo período: <b class="text-neutral-900">${fmt(new Date(c.today.getTime() + c.daysToPeriod * DAY))}</b>`;
+
+  // ring
+  const C = 2 * Math.PI * 86;
+  const ring = $('#ring');
+  ring.setAttribute('stroke-dasharray', C);
+  ring.setAttribute('stroke-dashoffset', C * (1 - c.day / c.len));
+  $('#ring-segments').innerHTML = c.rs.map(r => {
+    const seg = (r.e - r.s + 1) / c.len * C, off = (r.s - 1) / c.len * C;
+    const active = r.k === c.cur.k;
+    return `<circle cx="100" cy="100" r="86" fill="none" stroke-width="14" stroke="${PHASES[r.k].c1}" stroke-opacity="${active ? .9 : .28}"
+      stroke-dasharray="${seg - 2} ${C}" stroke-dashoffset="${-off}"/>`;
+  }).join('');
+
+  // timeline
+  $('#timeline').innerHTML = c.rs.map(r => `<div style="flex:${r.e-r.s+1};background:${PHASES[r.k].c1};opacity:${r.k===c.cur.k?1:.3}" title="${PHASES[r.k].name}: días ${r.s}-${r.e}"></div>`).join('');
+  $('#timeline-labels').innerHTML = c.rs.map(r => `<div style="flex:${r.e-r.s+1}" class="truncate ${r.k===c.cur.k?'text-neutral-900':''}">${PHASES[r.k].short}<br><span class="opacity-60">${r.s}–${r.e}</span></div>`).join('');
+
+  // mood
+  $('#mood').innerHTML = Object.entries(P.mood).map(([k, v]) => `
+    <div>
+      <div class="flex justify-between text-sm mb-1.5"><span class="text-neutral-600">${k}</span><span class="text-neutral-500">${v<34?'Baja':v<67?'Media':'Alta'}</span></div>
+      <div class="bar h-2 rounded-full bg-neutral-100/70 overflow-hidden"><span class="block h-full rounded-full accent-bg" style="width:0" data-w="${v}%"></span></div>
+    </div>`).join('');
+  requestAnimationFrame(() => setTimeout(() => document.querySelectorAll('.bar > span').forEach(s => s.style.width = s.dataset.w), 50));
+  $('#mood-summary').textContent = P.summary;
+
+  // alert
+  const al = $('#alert');
+  const important = (c.next.k === 'lutea' || c.next.k === 'menstrual') && c.daysToNext <= 3;
+  if (important) {
+    const N = PHASES[c.next.k];
+    const msg = c.next.k === 'lutea'
+      ? 'Se acerca la fase lútea: posible SPM. Aumenta la paciencia, ten snacks a mano y evita conflictos innecesarios.'
+      : 'El período está por llegar. Prepara bolsa de agua caliente, analgésicos e infusiones, y reserva planes tranquilos.';
+    al.className = 'fade-in rounded-2xl p-4 md:p-5 flex items-start gap-4 border';
+    al.style.cssText = `background:linear-gradient(90deg, ${N.c1}26, transparent);border-color:${N.c1}66`;
+    al.innerHTML = `<div class="text-2xl">${N.icon}</div><div><p class="font-semibold text-neutral-900">⚠ Transición en ${c.daysToNext} día${c.daysToNext>1?'s':''}: ${N.name}</p><p class="text-sm text-neutral-600 mt-1">${msg}</p></div>`;
+  } else al.className = 'hidden';
+
+  $('#tips-phase').textContent = P.name;
+  $('#today-label').textContent = data.name ? `Hoy, ${data.name} está en` : 'Hoy';
+  const A = astro();
+  document.body.classList.toggle('astro-on', !!A);
+  const box = $('#astro');
+  if (A) {
+    box.className = 'astro-card rounded-3xl p-6 md:p-8 fade-in';
+    box.innerHTML = `
+      <div class="flex flex-col md:flex-row gap-6 md:items-center">
+        <div class="flex items-center gap-4 md:w-64 shrink-0">
+          <div class="w-16 h-16 rounded-2xl grid place-items-center text-3xl border border-violet-300/30 bg-violet-400/10" style="color:${A.E.color}">${A.sym}</div>
+          <div><p class="text-xs uppercase tracking-widest text-violet-600">✦ Su cielo</p>
+            <p class="text-xl font-semibold text-neutral-900">${A.name}</p>
+            <p class="text-sm" style="color:${A.E.color}">${A.E.icon} Elemento ${A.E.name}</p></div>
+        </div>
+        <div class="flex-1 grid sm:grid-cols-2 gap-4">
+          <div class="rounded-2xl bg-neutral-50 p-4"><p class="text-xs text-neutral-500 mb-1">Su esencia</p><p class="text-sm text-neutral-600">${A.trait} <span class="text-neutral-500">${A.E.core}</span></p></div>
+          <div class="rounded-2xl bg-neutral-50 p-4"><p class="text-xs text-neutral-500 mb-1">${A.E.name} × ${P.short}</p><p class="text-sm text-neutral-800">${A.E.phase[c.cur.k]}</p></div>
+        </div>
+      </div>
+      <p class="text-[11px] text-neutral-400 mt-4">La astrología es una capa lúdica e interpretativa, sin base científica. Úsala como inspiración, no como diagnóstico.</p>`;
+  } else box.className = 'hidden';
+  renderTips(); renderSits(); renderOverview(c);
+}
+
+function renderTips() {
+  const P = PHASES[compute().cur.k];
+  const icon = { do: '✓', avoid: '✕', food: '◐' }[activeTab];
+  const col = { do: 'text-emerald-600 bg-emerald-50', avoid: 'text-rose-600 bg-rose-50', food: 'text-amber-600 bg-amber-50' }[activeTab];
+  $('#tips').innerHTML = P[activeTab].map((t, i) => `
+    <div class="fade-in rounded-2xl bg-white border border-black/[.05] p-4 flex gap-3 hover:bg-neutral-50 transition" style="animation-delay:${i*50}ms">
+      <span class="w-8 h-8 shrink-0 rounded-lg grid place-items-center ${col}">${icon}</span>
+      <p class="text-sm text-neutral-600 leading-relaxed">${t}</p>
+    </div>`).join('');
+  const A = astro();
+  if (A) $('#tips').insertAdjacentHTML('afterbegin', `
+    <div class="fade-in astro-card rounded-2xl p-4 flex gap-3 sm:col-span-2 lg:col-span-3">
+      <span class="w-8 h-8 shrink-0 rounded-lg grid place-items-center bg-violet-400/10" style="color:${A.E.color}">${A.sym}</span>
+      <p class="text-sm text-neutral-800 leading-relaxed"><span class="text-violet-600">Matiz ${A.name}:</span> ${A.E.tips[activeTab]}</p>
+    </div>`);
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === activeTab));
+}
+
+function renderSits() {
+  const q = $('#sit-search').value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  $('#sit-chips').innerHTML = SITUATIONS
+    .filter(s => s.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q))
+    .map(s => `<button id="sit-${s.id}" data-id="${s.id}" class="chip ${activeSit===s.id?'active':''} rounded-full border border-black/[.06] bg-white px-4 py-2 text-sm">${s.label}</button>`).join('')
+    || '<p class="text-sm text-neutral-400">Sin resultados.</p>';
+  const box = $('#sit-answer');
+  if (!activeSit) { box.innerHTML = '<p class="text-sm text-neutral-400">👆 Selecciona una situación.</p>'; return; }
+  const k = compute().cur.k, P = PHASES[k], S = SITUATIONS.find(s => s.id === activeSit);
+  const [ctx, steps, phrase] = S.r[k];
+  box.innerHTML = `
+    <div class="fade-in rounded-2xl p-5 md:p-6 border" style="border-color:${P.c1}55;background:linear-gradient(135deg,${P.c1}14,transparent)">
+      <p class="text-xs uppercase tracking-widest accent-text">${P.icon} En ${P.name}</p>
+      <h4 class="text-lg font-semibold text-neutral-900 mt-1">${S.label.replace(/^\S+\s/, '')}</h4>
+      <p class="text-neutral-600 mt-3 text-sm">${ctx}</p>
+      <ul class="mt-4 space-y-2">${steps.map(s => `<li class="flex gap-2 text-sm text-neutral-600"><span class="accent-text">→</span>${s}</li>`).join('')}</ul>
+      ${(A => A ? `<div class="mt-5 astro-card rounded-xl p-4"><p class="text-xs text-violet-600 mb-1">${A.sym} Ajuste para ${A.name}</p><p class="text-sm text-neutral-800">${A.E.sit}</p></div>` : '')(astro())}
+      <div class="mt-5 rounded-xl bg-neutral-50 p-4"><p class="text-xs text-neutral-500 mb-1">Puedes decir:</p><p class="text-neutral-900 italic">${phrase}</p></div>
+    </div>`;
+}
+
+function renderOverview(c) {
+  $('#overview').innerHTML = c.rs.map(r => { const P = PHASES[r.k], a = r.k === c.cur.k; return `
+    <div class="glass rounded-2xl p-5 transition ${a?'':'opacity-60 hover:opacity-100'}" style="${a?`border-color:${P.c1}88;box-shadow:0 0 30px ${P.c1}22`:''}">
+      <div class="flex items-center justify-between"><span class="text-2xl">${P.icon}</span><span class="text-xs text-neutral-500">Días ${r.s}–${r.e}</span></div>
+      <p class="font-semibold mt-3" style="color:${P.c1}">${P.name}</p>
+      <p class="text-xs text-neutral-500 mt-1">${P.tag}</p>
+    </div>`; }).join('');
+}
+
+// Events
+$('#in-len').oninput = e => $('#len-val').textContent = e.target.value;
+$('#in-per').oninput = e => $('#per-val').textContent = e.target.value;
+$('#setup-form').onsubmit = e => {
+  e.preventDefault();
+  data = { start: $('#in-start').value, len: +$('#in-len').value, per: +$('#in-per').value,
+    name: $('#in-name').value.trim(), birth: $('#in-birth').value, astro: $('#in-astro').checked };
+  localStorage.setItem(KEY, JSON.stringify(data)); render();
+};
+$('#btn-reset').onclick = () => { localStorage.removeItem(KEY); data = null; $('#setup-form').reset(); $('#len-val').textContent = 28; $('#per-val').textContent = 5; render(); };
+$('#btn-settings').onclick = () => {
+  if (data) { $('#in-start').value = data.start; $('#in-len').value = data.len; $('#len-val').textContent = data.len; $('#in-per').value = data.per; $('#per-val').textContent = data.per;
+    $('#in-name').value = data.name || ''; $('#in-birth').value = data.birth || ''; $('#in-astro').checked = data.astro !== false; $('#in-birth').dispatchEvent(new Event('input')); }
+  $('#setup').classList.toggle('hidden');
+  if (!$('#setup').classList.contains('hidden')) $('#dashboard').classList.add('hidden'); else if (data) $('#dashboard').classList.remove('hidden');
+};
+$('#tabs').onclick = e => { const b = e.target.closest('.tab'); if (b) { activeTab = b.dataset.tab; renderTips(); } };
+$('#sit-chips').onclick = e => { const b = e.target.closest('.chip'); if (b) { activeSit = b.dataset.id; renderSits(); } };
+$('#sit-search').oninput = renderSits;
+$('#in-birth').oninput = e => { const s = getSign(e.target.value); $('#sign-preview').textContent = s ? `${s.sym} ${s.name} · Elemento ${ELEMENTS[s.el].name}` : ''; };
+$('#in-start').max = new Date().toISOString().slice(0, 10);
+
+// ---------- Navegación inferior ----------
+function setNav(id) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === id)); }
+$('#bottom-nav').onclick = e => {
+  const b = e.target.closest('.nav-btn'); if (!b) return;
+  const go = b.dataset.go;
+  if (navigator.vibrate) navigator.vibrate(8);
+  if (go === 'settings') { $('#btn-settings').click(); window.scrollTo({ top: 0 }); setNav($('#setup').classList.contains('hidden') ? 'nav-home' : b.id); return; }
+  if (!data) return;
+  $('#setup').classList.add('hidden'); $('#dashboard').classList.remove('hidden');
+  if (go === 'top') window.scrollTo({ top: 0 }); else document.getElementById(go).scrollIntoView();
+  setNav(b.id);
+};
+const navObs = new IntersectionObserver(es => es.forEach(en => {
+  if (en.isIntersecting) setNav({ 'sec-tips': 'nav-tips', 'sec-guide': 'nav-guide' }[en.target.id] || 'nav-home');
+}), { rootMargin: '-45% 0px -45% 0px' });
+['sec-tips', 'sec-guide'].forEach(id => navObs.observe(document.getElementById(id)));
+window.addEventListener('scroll', () => { if (scrollY < 200 && $('#setup').classList.contains('hidden')) setNav('nav-home'); }, { passive: true });
+
+// ---------- PWA: iconos, manifest y service worker ----------
+function makeIcon(size, maskable) {
+  const cv = document.createElement('canvas'); cv.width = cv.height = size;
+  const x = cv.getContext('2d');
+  const g = x.createLinearGradient(0, 0, size, size); g.addColorStop(0, '#c94f74'); g.addColorStop(1, '#7a4f9e');
+  x.fillStyle = g;
+  if (maskable) x.fillRect(0, 0, size, size);
+  else { const r = size * .22; x.beginPath(); x.roundRect(0, 0, size, size, r); x.fill(); }
+  x.strokeStyle = 'rgba(255,255,255,.9)'; x.lineWidth = size * .05;
+  x.beginPath(); x.arc(size / 2, size / 2, size * (maskable ? .24 : .3), -Math.PI / 2, Math.PI * 1.2); x.stroke();
+  x.fillStyle = '#fff'; x.font = `600 ${size * (maskable ? .26 : .32)}px Outfit, sans-serif`;
+  x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('S', size / 2, size / 2 + size * .02);
+  return cv.toDataURL('image/png');
+}
+(function setupPWA() {
+  const base = location.href.split('#')[0].split('?')[0];
+  const scope = base.substring(0, base.lastIndexOf('/') + 1);
+  const ICON = 'https://lh3.googleusercontent.com/d/1lLmq6RW0XoYMSVXJ9HikI758w0wF7mhD';
+  const manifest = {
+    name: 'Mi amor ❤️', short_name: 'Mi amor ❤️',
+    description: 'Entiende y acompaña las fases del ciclo de tu pareja.',
+    start_url: base, scope, display: 'standalone', orientation: 'portrait',
+    background_color: '#f5f5f7', theme_color: '#f5f5f7', lang: 'es',
+    icons: [
+      { src: ICON, sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: ICON, sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: ICON, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+    ]
+  };
+  $('#manifest').href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+
+  // Service Worker: los navegadores no permiten registrar SW desde blob:, así que
+  // se usa sw.js (mismo directorio). Requiere HTTPS o localhost.
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js').catch(err => console.info('SW no disponible:', err.message));
+  }
+
+  // Instalación
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#install-btn').classList.remove('hidden'); });
+  $('#install-btn').onclick = async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#install-btn').classList.add('hidden'); };
+  window.addEventListener('appinstalled', () => $('#install-btn').classList.add('hidden'));
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && !standalone && !localStorage.getItem('sincro-ios-hint')) setTimeout(() => $('#ios-hint').classList.remove('hidden'), 2500);
+  $('#ios-close').onclick = () => { $('#ios-hint').classList.add('hidden'); localStorage.setItem('sincro-ios-hint', '1'); };
+})();
+
+render();
+setInterval(() => data && render(), 60 * 60 * 1000);
+</script>
+</body>
+</html>
