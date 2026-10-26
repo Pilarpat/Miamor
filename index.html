@@ -180,6 +180,59 @@ tailwind.config = { theme: { extend: { fontFamily: { sans: ['-apple-system','Bli
       </div>
     </section>
 
+    <!-- Detalle del día -->
+    <section id="sec-detail" class="glass rounded-3xl p-6 md:p-8 fade-in relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-48 h-48 rounded-full opacity-[.12] accent-bg blur-2xl pointer-events-none"></div>
+      <div id="notif-ready" class="hidden mb-4 rounded-2xl silver px-4 py-3 flex items-center gap-3 text-sm">
+        <span class="w-2 h-2 rounded-full accent-bg pulse-dot"></span>
+        <span class="flex-1 text-neutral-700"><b class="text-neutral-900">Notificación del día lista</b> · tu detalle te espera abajo</span>
+        <button id="notif-ready-close" class="text-neutral-400 text-lg px-2" aria-label="Cerrar">×</button>
+      </div>
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs uppercase tracking-[.2em] text-neutral-500">💡 Tu detalle para hoy</p>
+          <h3 id="detail-title" class="text-xl font-semibold text-neutral-900 mt-1"></h3>
+        </div>
+        <button id="detail-refresh" class="shrink-0 silver rounded-full w-11 h-11 grid place-items-center text-lg transition active:scale-90" aria-label="Otra idea" title="Inspírame otra idea">↻</button>
+      </div>
+      <div id="detail-cats" class="flex gap-2 mt-4 overflow-x-auto"></div>
+      <div id="detail-body" class="mt-4"></div>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <button id="detail-copy" class="rounded-full border border-black/[.06] bg-white px-4 text-sm">📋 Copiar</button>
+        <a id="detail-wa" target="_blank" rel="noopener" class="hidden rounded-full accent-bg text-white px-4 text-sm inline-flex items-center min-h-[44px]">Enviar por WhatsApp</a>
+        <button id="detail-done" class="rounded-full border border-black/[.06] bg-white px-4 text-sm">✓ Hecho</button>
+      </div>
+      <!-- Notificaciones -->
+      <details class="mt-6 rounded-2xl bg-neutral-50 border border-black/[.05] group">
+        <summary class="cursor-pointer list-none px-4 py-3 flex items-center justify-between text-sm min-h-[44px]">
+          <span class="font-medium text-neutral-800">🔔 Notificaciones y recordatorios</span>
+          <span id="notif-status" class="text-xs text-neutral-500"></span>
+        </summary>
+        <div class="px-4 pb-4 space-y-4">
+          <label class="flex items-center justify-between gap-4 cursor-pointer">
+            <span class="text-sm text-neutral-700">Recordatorio diario</span>
+            <span class="relative inline-flex">
+              <input id="notif-toggle" type="checkbox" class="peer sr-only">
+              <span class="w-12 h-7 rounded-full bg-neutral-300 peer-checked:bg-[var(--accent)] transition"></span>
+              <span class="absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
+            </span>
+          </label>
+          <label class="flex items-center justify-between gap-4">
+            <span class="text-sm text-neutral-700">Hora del aviso</span>
+            <input id="notif-time" type="time" value="09:00" class="bg-white border border-black/[.08] rounded-xl px-3 py-2 text-sm min-h-[44px]">
+          </label>
+          <div class="flex gap-2">
+            <button id="notif-test" class="rounded-full border border-black/[.06] bg-white px-4 text-sm">Probar ahora</button>
+          </div>
+          <p id="notif-hint" class="text-xs text-neutral-500 leading-relaxed"></p>
+          <div>
+            <p class="text-xs uppercase tracking-widest text-neutral-400 mb-2">Historial</p>
+            <ul id="detail-history" class="space-y-1.5 text-xs text-neutral-600 max-h-40 overflow-y-auto"></ul>
+          </div>
+        </div>
+      </details>
+    </section>
+
     <!-- Astro -->
     <section id="astro" class="hidden astro-card rounded-3xl p-6 md:p-8 fade-in"></section>
 
@@ -496,7 +549,7 @@ function render() {
       </div>
       <p class="text-[11px] text-neutral-400 mt-4">La astrología es una capa lúdica e interpretativa, sin base científica. Úsala como inspiración, no como diagnóstico.</p>`;
   } else box.className = 'hidden';
-  renderTips(); renderSits(); renderOverview(c);
+  renderTips(); renderSits(); renderOverview(c); renderDetail();
 }
 
 function renderTips() {
@@ -569,6 +622,133 @@ $('#sit-search').oninput = renderSits;
 $('#in-birth').oninput = e => { const s = getSign(e.target.value); $('#sign-preview').textContent = s ? `${s.sym} ${s.name} · Elemento ${ELEMENTS[s.el].name}` : ''; };
 $('#in-start').max = new Date().toISOString().slice(0, 10);
 
+// ---------- Detalle del día ----------
+const DETAILS = {
+  menstrual: {
+    msg: ['¿Cómo vas con los cólicos, {n}? Si quieres, hoy me encargo yo de la cena ❤️', 'Solo pasaba a recordarte que eres increíble, incluso en los días en que tu cuerpo te pide pausa.', 'Hoy no tienes que hacer nada. Dime qué se te antoja y llego con ello.', 'Te pienso. Abrígate, descansa, y esta noche te toca mantita y peli.'],
+    gesture: ['Prepárale una infusión de jengibre o manzanilla y déjasela al lado sin decir nada.', 'Calienta una bolsa de agua y ofrécele un masaje suave en la zona lumbar.', 'Pide su comida reconfortante favorita a domicilio, sin preguntarle demasiadas opciones.', 'Encarga tú las tareas de casa de hoy: platos, ropa, compras.'],
+    quick: ['Ten listo chocolate negro y analgésicos antes de que lo pida.', 'Baja luces y ruido en casa al volver: crea un ambiente de calma.', 'Pregúntale: “¿Qué te vendría bien ahora mismo?” y haz exactamente eso.']
+  },
+  folicular: {
+    msg: ['Tengo una idea para este finde que creo que te va a encantar 😏 ¿te la cuento esta noche?', 'Me encanta verte con tanta energía, {n}. ¿Qué proyecto te ilusiona hoy?', '¿Probamos ese restaurante nuevo esta semana? Yo invito.', 'Contigo cualquier plan nuevo suena mejor. ¿Aventura este sábado?'],
+    gesture: ['Reserva una actividad nueva para los dos: clase de cocina, escalada o una ruta.', 'Sorpréndela con entradas para algo que mencionó hace poco.', 'Propón entrenar juntos o salir a caminar rápido al atardecer.', 'Ayúdala a planificar ese objetivo o viaje que tiene en mente.'],
+    quick: ['Pregúntale por sus ideas y escucha con entusiasmo genuino.', 'Rompe la rutina: cambia el plan de siempre por algo distinto.', 'Comparte una canción o podcast que creas que le inspirará.']
+  },
+  ovulatoria: {
+    msg: ['Hoy estás especialmente guapísima. Solo quería que lo supieras 😍', 'Reservé algo para esta noche. Ponte cómoda… o guapa. Tú eliges.', 'No dejo de pensar en ti, {n}. ¿Cita hoy?', 'Eres mi persona favorita para celebrar cualquier cosa. ¿Salimos?'],
+    gesture: ['Organiza una cena especial o salid a bailar / música en vivo.', 'Llévale flores o un detalle bonito sin motivo aparente.', 'Planea un plan social con amigos que ella disfrute.', 'Prepara una noche romántica: velas, música y su vino favorito.'],
+    quick: ['Hazle un cumplido sincero y específico (no solo físico).', 'Deja el móvil a un lado y dedica 20 minutos de conversación profunda.', 'Recuerda la anticoncepción si no buscan embarazo: es su ventana fértil.']
+  },
+  lutea: {
+    msg: ['Si hoy el día pesa, aquí estoy. Sin preguntas, solo abrazos 🤍', 'Tienes todo el derecho a sentirte como te sientas, {n}. Te quiero igual.', 'Compré tus snacks favoritos para casa. Por si acaso 😉', '¿Plan tranquilo esta noche? Baño caliente y yo cocino.'],
+    gesture: ['Ten en casa sus antojos favoritos (chocolate negro, frutos secos) antes de que los pida.', 'Prepárale un baño caliente con sales o una infusión de tila/melisa.', 'Encarga una tarea que le estrese esta semana para aligerar su carga.', 'Cocina algo reconfortante y casero: sopa, pasta o boniato al horno.'],
+    quick: ['Valida antes de opinar: “Tiene sentido que te sientas así”.', 'Evita temas conflictivos hoy; pospone lo que no sea urgente.', 'Mantén los planes previsibles y sin cambios de última hora.']
+  }
+};
+const CATS = { msg: ['💬', 'Mensaje dulce'], gesture: ['🎁', 'Gesto práctico'], quick: ['⚡', 'Atención rápida'] };
+const ELEM_QUICK = {
+  fuego: 'Como es de fuego, hazlo directo y con energía: menos palabras, más acción.',
+  tierra: 'Como es de tierra, que sea tangible: algo que pueda tocar, saborear o que le resuelva algo.',
+  aire: 'Como es de aire, acompáñalo de conversación: pregúntale y escucha.',
+  agua: 'Como es de agua, cuida el tono: ternura y contacto físico suave.'
+};
+const DKEY = 'sincro-detail-v1', NKEY = 'sincro-notif-v1';
+const todayStr = () => new Date().toLocaleDateString('sv');
+let dstate = JSON.parse(localStorage.getItem(DKEY) || '{}'); // {date, offset, cat, history:[]}
+let nstate = JSON.parse(localStorage.getItem(NKEY) || '{"on":false,"time":"09:00","last":""}');
+const saveD = () => localStorage.setItem(DKEY, JSON.stringify(dstate));
+const saveN = () => localStorage.setItem(NKEY, JSON.stringify(nstate));
+function seed(s) { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; }
+
+function getDetail() {
+  if (!data) return null;
+  const k = compute().cur.k, A = astro(), t = todayStr();
+  if (dstate.date !== t) { dstate.date = t; dstate.offset = 0; dstate.cat = null; dstate.done = false; saveD(); }
+  const s = seed(t + k) + (dstate.offset || 0);
+  const cat = dstate.cat || ['msg', 'gesture', 'quick'][s % 3];
+  const list = DETAILS[k][cat];
+  let text = list[s % list.length].replace(/\{n\}/g, data.name || 'mi amor');
+  const extra = (cat === 'quick' && A) ? `${A.sym} ${ELEM_QUICK[A.el]}` : '';
+  return { k, cat, text, extra };
+}
+function notifText(d) {
+  const pre = d.cat === 'msg' ? 'Mándale: “' + d.text + '”' : d.text;
+  return `💡 Tu detalle para hoy con ${data.name || 'tu pareja'}: ${pre}`;
+}
+function pushHistory(d) {
+  dstate.history = dstate.history || [];
+  if (!dstate.history.some(h => h.date === dstate.date && h.text === d.text))
+    dstate.history.unshift({ date: dstate.date, cat: d.cat, text: d.text });
+  dstate.history = dstate.history.slice(0, 30); saveD();
+}
+function renderDetail() {
+  const d = getDetail(); if (!d) return;
+  const P = PHASES[d.k];
+  $('#detail-title').textContent = `${CATS[d.cat][1]} · ${P.short}`;
+  $('#detail-cats').innerHTML = Object.entries(CATS).map(([key, [ic, lb]]) =>
+    `<button data-cat="${key}" class="chip ${d.cat === key ? 'active' : ''} shrink-0 rounded-full border border-black/[.06] bg-white px-4 text-sm">${ic} ${lb}</button>`).join('');
+  $('#detail-body').innerHTML = `
+    <div class="fade-in rounded-2xl bg-white border border-black/[.05] p-5">
+      <p class="text-lg leading-relaxed text-neutral-900 ${d.cat === 'msg' ? 'italic' : ''}">${d.cat === 'msg' ? '“' + d.text + '”' : d.text}</p>
+      ${d.extra ? `<p class="mt-3 text-sm text-violet-600">${d.extra}</p>` : ''}
+      ${dstate.done ? '<p class="mt-3 text-sm text-emerald-600">✓ ¡Hecho hoy! Buen trabajo.</p>' : ''}
+    </div>`;
+  const wa = $('#detail-wa');
+  if (d.cat === 'msg') { wa.classList.remove('hidden'); wa.href = 'https://wa.me/?text=' + encodeURIComponent(d.text); } else wa.classList.add('hidden');
+  renderNotifUI();
+}
+function renderNotifUI() {
+  $('#notif-toggle').checked = !!nstate.on;
+  $('#notif-time').value = nstate.time;
+  const perm = 'Notification' in window ? Notification.permission : 'unsupported';
+  $('#notif-status').textContent = nstate.on ? `Activo · ${nstate.time}` : 'Desactivado';
+  $('#notif-hint').textContent =
+    perm === 'unsupported' ? 'Este navegador no admite notificaciones. Verás el aviso “Notificación del día lista” dentro de la app.' :
+    perm === 'denied' ? 'Las notificaciones están bloqueadas en el navegador. Usaremos el aviso dentro de la app; puedes activarlas en los ajustes del sistema.' :
+    'El aviso se envía a la hora elegida mientras la app esté abierta o en segundo plano; si estaba cerrada, lo verás al abrirla. En iPhone requiere instalarla en la pantalla de inicio (iOS 16.4+).';
+  $('#detail-history').innerHTML = (dstate.history || []).map(h =>
+    `<li class="flex gap-2"><span class="text-neutral-400 shrink-0">${h.date.slice(5).split('-').reverse().join('/')}</span><span>${CATS[h.cat][0]} ${h.text}</span></li>`).join('') || '<li class="text-neutral-400">Aún no hay historial.</li>';
+}
+async function showNotif(force) {
+  const d = getDetail(); if (!d) return;
+  const body = notifText(d);
+  let shown = false;
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+      if (reg) await reg.showNotification('Mi amor ❤️', { body, icon: $('#apple-icon').href, tag: 'detalle-diario' });
+      else new Notification('Mi amor ❤️', { body, icon: $('#apple-icon').href, tag: 'detalle-diario' });
+      shown = true;
+    } catch (e) { shown = false; }
+  }
+  if (!shown || force) $('#notif-ready').classList.remove('hidden');
+  pushHistory(d); renderNotifUI();
+}
+let notifTimer = null;
+function scheduleNotif() {
+  clearTimeout(notifTimer);
+  if (!nstate.on || !data) return;
+  const [h, m] = nstate.time.split(':').map(Number);
+  const now = new Date(), at = new Date(); at.setHours(h, m, 0, 0);
+  const t = todayStr();
+  if (now >= at && nstate.last !== t) { nstate.last = t; saveN(); showNotif(); } // ya pasó la hora hoy
+  if (now >= at) at.setDate(at.getDate() + 1);
+  notifTimer = setTimeout(() => { nstate.last = todayStr(); saveN(); render(); showNotif(); scheduleNotif(); }, Math.min(at - now, 2147483000));
+}
+$('#detail-refresh').onclick = () => { dstate.offset = (dstate.offset || 0) + 1; dstate.cat = null; dstate.done = false; saveD(); renderDetail(); };
+$('#detail-cats').onclick = e => { const b = e.target.closest('[data-cat]'); if (b) { dstate.cat = b.dataset.cat; saveD(); renderDetail(); } };
+$('#detail-copy').onclick = async () => { const d = getDetail(); try { await navigator.clipboard.writeText(d.text); $('#detail-copy').textContent = '✓ Copiado'; setTimeout(() => $('#detail-copy').textContent = '📋 Copiar', 1500); } catch {} };
+$('#detail-done').onclick = () => { dstate.done = true; pushHistory(getDetail()); renderDetail(); if (navigator.vibrate) navigator.vibrate([10, 40, 10]); };
+$('#notif-ready-close').onclick = () => $('#notif-ready').classList.add('hidden');
+$('#notif-toggle').onchange = async e => {
+  nstate.on = e.target.checked;
+  if (nstate.on && 'Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
+  saveN(); renderNotifUI(); scheduleNotif();
+};
+$('#notif-time').onchange = e => { nstate.time = e.target.value || '09:00'; nstate.last = ''; saveN(); renderNotifUI(); scheduleNotif(); };
+$('#notif-test').onclick = async () => { if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission(); showNotif(); };
+document.addEventListener('visibilitychange', () => { if (!document.hidden && data) { render(); scheduleNotif(); } });
+
 // ---------- Navegación inferior ----------
 function setNav(id) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === id)); }
 $('#bottom-nav').onclick = e => {
@@ -636,6 +816,7 @@ function makeIcon(size, maskable) {
 })();
 
 render();
+scheduleNotif();
 setInterval(() => data && render(), 60 * 60 * 1000);
 </script>
 </body>

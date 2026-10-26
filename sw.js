@@ -1,5 +1,13 @@
-// Mi amor app ❤️ – Service Worker mínimo (offline básico)
-const CACHE = 'miamor-v2';
+// Mi amor ❤️ – Service Worker mínimo (offline básico)
+const CACHE = 'miamor-v3';
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    const c = list.find(w => 'focus' in w);
+    return c ? c.focus() : self.clients.openWindow('./#sec-detail');
+  }));
+});
 const CORE = ['./', './index.html'];
 
 self.addEventListener('install', e => {
